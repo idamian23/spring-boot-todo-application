@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.models.TodoItem;
 import com.example.demo.repositories.TodoItemRepository;
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
 
 @Controller
 public class TodoItemController {
@@ -35,4 +37,15 @@ public class TodoItemController {
         return modelAndView;
     }
 
+    @PostMapping("/todo/{id}")
+    public String updateTodoitem(@PathVariable("id") long id, @Valid TodoItem todoItem, BindingResult result, Model model ){
+        if(result.hasErrors()){
+            todoItem.setId(id);
+            return "update-todo-item";
+        }
+
+        todoItem.setModifiedDate(Instant.now());
+        todoItemRepository.save(todoItem);
+        return "redirect:/";
+    }
 }
