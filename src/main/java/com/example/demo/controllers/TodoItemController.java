@@ -16,14 +16,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.example.demo.repositories.TodoItemRepository;
+
 @Controller
 public class TodoItemController {
     private final Logger logger = LoggerFactory.getLogger(TodoItemController.class);
+
+    @Autowired
+    private TodoItemRepository todoItemRepository;
 
     @GetMapping("/")
     public ModelAndView index(){
         logger.debug("request to GET index");
         ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("todoItems",todoItemRepository.findAll());
+
+
         return modelAndView;
     }
 
